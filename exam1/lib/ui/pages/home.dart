@@ -1,6 +1,7 @@
 // home.dart
 import 'package:flutter/material.dart';
 import 'package:exam1/ui/pages/Myprofile_page.dart';
+import 'package:exam1/ui/pages/login_page.dart';
 
 class HomePage extends StatelessWidget {
   final String? token;
@@ -13,10 +14,20 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('메인 페이지'),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.logout),
-          )
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                ),
+                (route) => false, // 이전 라우트를 모두 제거
+              );
+            },
+            child: const Text(
+              '로그아웃',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
         ],
       ),
       body: Center(

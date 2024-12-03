@@ -20,8 +20,8 @@ class _SignUpPageState extends State<SignUpPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('회원가입 성공'),
-        content: const Text('회원가입이 완료되었습니다.'),
+        title: const Text('메일 발송'),
+        content: const Text('메일을 확인하시고 계정을 활성화해주세요.'),
         actions: [
           TextButton(
             onPressed: () {
