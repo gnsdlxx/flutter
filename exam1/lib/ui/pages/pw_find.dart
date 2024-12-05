@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:exam1/utils/dialog.dart';
 
 class FindPasswordPage extends StatefulWidget {
   const FindPasswordPage({super.key});
@@ -12,24 +11,28 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
-  Future<void> _sendPasswordResetRequest(String id, String email) async {
-    await Future.delayed(const Duration(seconds: 2));
-    // 이 부분이 서버 연동 되야함 (utils/http/user.dart 파일에 pw_find 요청을 보내는 코드 추가)
-    bool isSuccess = true;
+  // 비밀번호 재설정 요청을 모의 처리하는 함수
+  void _sendPasswordResetRequest(String id, String email) {
+    // 모의 비밀번호 재설정 요청 처리
+    Future.delayed(const Duration(seconds: 2), () {
+      // 테스트용으로 아이디와 이메일이 일치하는지 확인
+      if (id == "test_id" && email == "test@example.com") {
+        _showSnackbar('이메일로 비밀번호 재설정 링크가 전송되었습니다.');
+      } else {
+        _showSnackbar('아이디 또는 이메일이 잘못되었습니다.');
+      }
+    });
+  }
 
-    if (isSuccess) {
-      createDialog(
-        context,
-        '인증 성공',
-        Text('이메일로 비밀번호 재설정 링크가 전송되었습니다.'),
-      );
-    } else {
-      createDialog(
-        context,
-        '인증 실패',
-        Text('아이디 또는 이메일이 잘못되었습니다.'),
-      );
-    }
+  // 스낵바로 메시지 표시하는 함수
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.green,
+      ),
+    );
   }
 
   @override
@@ -76,16 +79,12 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                String id = _idController.text;
-                String email = _emailController.text;
+                String id = _idController.text.trim();
+                String email = _emailController.text.trim();
                 if (id.isNotEmpty && email.isNotEmpty) {
                   _sendPasswordResetRequest(id, email); // 비밀번호 재설정 요청
                 } else {
-                  createDialog(
-                    context,
-                    '오류',
-                    Text('아이디와 이메일을 모두 입력하세요.'),
-                  );
+                  _showSnackbar('아이디와 이메일을 모두 입력하세요.');
                 }
               },
               style: ElevatedButton.styleFrom(

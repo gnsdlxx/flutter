@@ -1,11 +1,8 @@
-import 'package:exam1/utils/http/models/response.dart';
-import 'package:exam1/ui/pages/signup_page.dart';
-import 'package:exam1/ui/pages/id_find.dart';
-import 'package:exam1/ui/pages/pw_find.dart';
-import 'package:exam1/utils/http/user.dart';
-import 'package:exam1/ui/pages/home.dart';
-import 'package:exam1/utils/dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:exam1/ui/pages/signup_page.dart'; // SignUpPage 임포트
+import 'package:exam1/ui/pages/id_find.dart'; // FindIdPage 임포트
+import 'package:exam1/ui/pages/pw_find.dart'; // FindPasswordPage 임포트
+import 'package:exam1/ui/pages/home.dart'; // HomePage 임포트
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start, // 위쪽으로 정렬
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 20), // 위쪽 여백 추가
               Image.asset(
@@ -61,13 +58,20 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
               ),
               const SizedBox(height: 20),
-              
               ElevatedButton(
                 onPressed: () {
-                  // 성공 여부와 관계없이 바로 메인 페이지로 이동
-                  Navigator.of(context).pushReplacement(
+                  String email = _loginController.text;
+                  String password = _passwordController.text;
+
+                  print('Email: $email');
+                  print('Password: $password');
+
+                  // 로그인 성공 후 HomePage로 이동
+                  Navigator.push(
+                    context,
                     MaterialPageRoute(
-                      builder: (context) => HomePage(token: "test_token"), // 임시 토큰 전달
+                      builder: (context) =>
+                          HomePage(token: email), // token에 email을 전달
                     ),
                   );
                 },
@@ -83,17 +87,19 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(fontSize: 18),
                 ),
               ),
-
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
                     onPressed: () {
+                      // 아이디 찾기 페이지로 이동
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const FindIdPage()),
+                          builder: (context) =>
+                              const FindIdPage(), // FindIdPage로 이동
+                        ),
                       );
                     },
                     child: const Text(
@@ -109,10 +115,13 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(width: 10),
                   TextButton(
                     onPressed: () {
+                      // 비밀번호 찾기 페이지로 이동
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const FindPasswordPage()),
+                          builder: (context) =>
+                              const FindPasswordPage(), // FindPasswordPage로 이동
+                        ),
                       );
                     },
                     child: const Text(
@@ -122,12 +131,14 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 200), // 아래 여백 추가
+              const SizedBox(height: 200),
               TextButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SignUpPage()),
+                    MaterialPageRoute(
+                      builder: (context) => const SignUpPage(),
+                    ),
                   );
                 },
                 child: const Text(

@@ -1,7 +1,7 @@
-// MyProfileSettingPage.dart
+//마이프로필 수정 페이지
 import 'package:flutter/material.dart';
 
-class MyProfileSettingPage extends StatelessWidget {
+class ProfileEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -43,10 +43,11 @@ class MyProfileSettingPage extends StatelessWidget {
             ),
             Divider(),
             _buildSectionTitle('계정 보안'),
-            _buildAccountInfoItem('아이디', 'asdfghj@pcu.ac.kr'),
-            _buildAccountInfoItem('전화번호', '010-0000-0000'),
-            _buildAccountInfoItem('비밀번호 변경'),
-            _buildAccountInfoItem('이메일 변경'),
+            _buildAccountInfoItem(
+                context, '아이디', 'asdfghj@pcu.ac.kr', '아이디 변경'),
+            _buildAccountInfoItem(context, '전화번호', '010-0000-0000', '전화번호 변경'),
+            _buildAccountInfoItem(context, '비밀번호 변경', '', '비밀번호 변경'),
+            _buildAccountInfoItem(context, '이메일 변경', '', '이메일 변경'),
             Divider(),
             _buildSectionTitle('이용 안내'),
             _buildInfoItem('문의하기'),
@@ -59,13 +60,14 @@ class MyProfileSettingPage extends StatelessWidget {
             _buildSectionTitle('기타'),
             _buildInfoItem('정보 동의 설정'),
             _buildInfoItem('회원 탈퇴'),
-            _buildInfoItem('로그아웃'),
+            _buildInfoItem('로그아웃', onTap: () => _logout(context)),
           ],
         ),
       ),
     );
   }
 
+  // 섹션 제목
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -76,25 +78,98 @@ class MyProfileSettingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAccountInfoItem(String title, [String? subtitle]) {
+  // 계정 정보 항목 (아이디, 전화번호 등)
+  Widget _buildAccountInfoItem(
+      BuildContext context, String title, String subtitle, String action) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       title: Text(title),
-      subtitle: subtitle != null ? Text(subtitle) : null,
+      subtitle: subtitle.isNotEmpty ? Text(subtitle) : null,
       trailing: Icon(Icons.chevron_right),
       onTap: () {
-        // 각 항목 클릭 시 동작
+        // 다이얼로그를 띄워서 값 수정할 수 있게 함
+        _showEditDialog(context, title, subtitle, action);
       },
     );
   }
 
-  Widget _buildInfoItem(String title) {
+  // 일반 정보 항목 (문의하기 등)
+  Widget _buildInfoItem(String title, {VoidCallback? onTap}) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       title: Text(title),
       trailing: Icon(Icons.chevron_right),
-      onTap: () {
-        // 각 항목 클릭 시 동작
+      onTap: onTap,
+    );
+  }
+
+  // 다이얼로그 표시하여 항목을 수정
+  void _showEditDialog(
+      BuildContext context, String field, String currentValue, String action) {
+    TextEditingController controller =
+        TextEditingController(text: currentValue);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('$action'),
+          content: TextField(
+            controller: controller,
+            decoration: InputDecoration(labelText: field),
+            keyboardType: field == '전화번호' || field == '비밀번호 변경'
+                ? TextInputType.number
+                : TextInputType.text,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('취소'),
+            ),
+            TextButton(
+              onPressed: () {
+                // 사용자 입력을 처리하여 실제 값을 업데이트 할 수 있도록 함
+                Navigator.of(context).pop();
+                // 여기서 실제로 아이디, 전화번호, 비밀번호, 이메일을 업데이트 할 수 있음
+                print('$field: ${controller.text}');
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // 로그아웃 처리
+  void _logout(BuildContext context) {
+    // 로그아웃 로직을 여기에 추가 (예: 토큰 삭제, 로그인 페이지로 이동 등)
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('로그아웃'),
+          content: Text('정말 로그아웃 하시겠습니까?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('취소'),
+            ),
+            TextButton(
+              onPressed: () {
+                // 실제 로그아웃 처리를 이곳에 구현
+                // 예: 로그아웃 후 로그인 페이지로 이동
+                Navigator.of(context).pop();
+                print('로그아웃 완료');
+                // Navigator.pushReplacementNamed(context, '/login');
+              },
+              child: const Text('로그아웃'),
+            ),
+          ],
+        );
       },
     );
   }

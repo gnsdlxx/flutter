@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:exam1/utils/dialog.dart';
 
 class FindIdPage extends StatefulWidget {
   const FindIdPage({super.key});
@@ -11,24 +10,25 @@ class FindIdPage extends StatefulWidget {
 class _FindIdPageState extends State<FindIdPage> {
   final TextEditingController _emailController = TextEditingController();
 
-  Future<void> _sendEmailVerification(String email) async {
-    await Future.delayed(const Duration(seconds: 2));
-    // 이 부분이 서버 연동 되야함 (utils/http/user.dart 파일에 id_find 요청을 보내는 코드 추가)
-    bool isSuccess = true;
+  Future<void> _mockSendEmailVerification(String email) async {
+    await Future.delayed(const Duration(seconds: 2)); // 서버 통신 대기 시간 모방
 
-    if (isSuccess) {
-      createDialog(
-        context,
-        '인증 성공',
-        Text('이메일로 비밀번호 재설정 링크가 전송되었습니다.'),
-      );
+    // 간단한 이메일 검증
+    if (email == "test@example.com") {
+      _showSnackBar('이메일로 아이디가 전송되었습니다. (모의 동작)', Colors.green);
     } else {
-      createDialog(
-        context,
-        '인증 실패',
-        Text('아이디 또는 이메일이 잘못되었습니다.'),
-      );
+      _showSnackBar('등록된 이메일이 아닙니다. (모의 동작)', Colors.red);
     }
+  }
+
+  void _showSnackBar(String message, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: color,
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   @override
@@ -62,15 +62,11 @@ class _FindIdPageState extends State<FindIdPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                String email = _emailController.text;
+                String email = _emailController.text.trim();
                 if (email.isNotEmpty) {
-                  _sendEmailVerification(email); // 이메일 인증 요청
+                  _mockSendEmailVerification(email); // 모의 이메일 인증 요청
                 } else {
-                  createDialog(
-                    context,
-                    '오류',
-                    Text('이메일을 입력하세요.'),
-                  );
+                  _showSnackBar('이메일을 입력하세요.', Colors.orange);
                 }
               },
               style: ElevatedButton.styleFrom(

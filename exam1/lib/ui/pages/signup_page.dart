@@ -20,13 +20,13 @@ class _SignUpPageState extends State<SignUpPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('메일 발송'),
-        content: const Text('메일을 확인하시고 계정을 활성화해주세요.'),
+        title: const Text('회원가입 성공'),
+        content: const Text('회원가입이 완료되었습니다.'),
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.pop(context); // 다이얼로그 닫기
+              Navigator.pop(context); // SignUpPage 닫고 LoginPage로 돌아가기
             },
             child: const Text('확인'),
           ),
@@ -107,7 +107,7 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(height: 10),
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(context); // 로그인 페이지로 돌아가기
                 },
                 child: const Text(
                   '로그인 페이지로 돌아가기',
