@@ -5,6 +5,7 @@ import 'package:exam1/ui/pages/home.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:exam1/ui/pages/MyprofileSetting_page.dart';
+import 'package:exam1/ui/pages/PostEditPage.dart';
 
 void main() {
   runApp(const MainApp());
